@@ -1,0 +1,18 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "debug": false,
+      "useBuiltIns": false
+    }],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    ["babel-plugin-styled-components", {
+      "transpileTemplateLiterals": false
+    }],
+    "syntax-dynamic-import",
+    "@babel/plugin-transform-runtime",
+    [ "@babel/plugin-proposal-class-properties", { "loose": true } ],
+    "transform-async-to-generator"
+  ]
+}
