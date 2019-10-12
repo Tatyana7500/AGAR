@@ -9,7 +9,7 @@ let channel = null;
 
 export default function* watchSaga() {
     channel = yield call(initSocketChannel);
-    yield takeEvery(sendOnline);
+
 }
 
 function initSocketChannel() {
@@ -19,6 +19,7 @@ function initSocketChannel() {
 
     channel = eventChannel(emitter => {
         socket = createSocket(constants.LOCALHOST);
+        socket.on(constants.FOODS, data => foods(emitter, data));
 
         return () => {
             socket.close();
@@ -31,11 +32,7 @@ function initSocketChannel() {
     return channel;
 }
 
-function* sendOnline() {
-    if (!socket || !channel) {
-        return;
-    }
-
-    const userId = 1;
-    socket.emit(constants.ONLINE, userId);
-}
+export const foods = (emitter, data) => {
+    console.log(data);
+    // emitter(actions.addUserOnlineAction(data));
+};
