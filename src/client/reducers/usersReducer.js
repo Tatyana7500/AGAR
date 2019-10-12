@@ -1,6 +1,7 @@
 import * as constants from '../../constants';
 
 const initialState = {
+    users: [],
 };
 
 export default function (state = initialState, action) {

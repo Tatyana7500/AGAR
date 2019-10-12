@@ -9,6 +9,7 @@ let channel = null;
 
 export default function* watchSaga() {
     channel = yield call(initSocketChannel);
+    yield fork(channelLoop);
 
 }
 
@@ -33,6 +34,12 @@ function initSocketChannel() {
 }
 
 export const foods = (emitter, data) => {
-    console.log(data);
-    // emitter(actions.addUserOnlineAction(data));
+    emitter(actions.addFoodsToFieldAction(data));
 };
+
+export function* channelLoop () {
+    while (channel){
+        const action = yield take(channel);
+        yield put(action);
+    }
+}

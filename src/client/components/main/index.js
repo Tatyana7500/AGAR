@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
+import * as selectors from '../../selectors';
 import Main from './Main.jsx';
 
 export const mapStateToProps = state => ({
+    foods: selectors.getFoods(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
