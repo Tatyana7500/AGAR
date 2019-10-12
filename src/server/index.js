@@ -16,7 +16,12 @@ const model = new Model();
 model.initialize();
 
 io.sockets.on('connection', async socket => {
-    // console.log(socket);
-    console.log('SERVER');
-    io.sockets.emit(constants.FOODS, model.foods);
+    await socket.on(constants.PLAYER, (response) => {
+        const player = model.createPlayer(response.name, response.color);
+
+        io.sockets.emit(constants.I_PLAYER, player);
+    });
+
+    io.sockets.emit(constants.FOODS, model.foods.map(food => food));
+    io.sockets.emit(constants.PLAYERS, model.players.map(player => player));
 });
