@@ -41,8 +41,7 @@ function createPlayer() {
 }
 
 export const player = (emitter, data) => {
-    console.log(' you player ');
-    console.log(data);
+   emitter(actions.addSelfPlayerAction(data));
 };
 
 export const players = (emitter, data) => {

@@ -4,6 +4,7 @@ import Main from './Main.jsx';
 
 export const mapStateToProps = state => ({
     foods: selectors.getFoods(state),
+    player: selectors.getPlayer(state),
 });
 
 export const mapDispatchToProps = dispatch => ({

@@ -23,5 +23,5 @@ io.sockets.on('connection', async socket => {
     });
 
     io.sockets.emit(constants.FOODS, model.foods.map(food => food));
-    io.sockets.emit(constants.PLAYERS, model.players.map(player => player));
+    //io.sockets.emit(constants.PLAYERS, model.players.map(player => player));
 });
