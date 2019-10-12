@@ -14,24 +14,30 @@ class Model {
         const { foodsCount, foodsRadius } = config;
 
         for (let i = 0; i < foodsCount; i++) {
-            const food = { radius: foodsRadius, x: Math.floor(Math.random() * 5000), y: Math.floor(Math.random() * 5000), color: this.rndColor() };
+            const food = { radius: foodsRadius, x: this.randomNumber(), y: this.randomNumber(), color: this.randomColor() };
 
             this.foods.push(food);
         }
     }
 
-    addPlayer(name, color) {
+    createPlayer(name, color) {
         const { playerRadius } = config;
         const player = {
             name,
             color,
-            x: 200,
-            y: 200,
+            x: this.randomNumber(),
+            y: this.randomNumber(),
             radius: playerRadius,
         };
 
         this.players.push(player);
+
+        return player;
     }
+
+    randomNumber() {
+        return Math.floor(Math.random() * 5000);
+    };
 
     rndColor() {
         let hex = ['0', '1', '2', '3', '4', '5', '6', '7',
