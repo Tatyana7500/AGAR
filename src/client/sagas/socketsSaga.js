@@ -1,5 +1,6 @@
 import { put, call, takeEvery, fork, select, take } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
+import history from '../utils/browserHistory';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
 import * as constants from '../../constants';
@@ -44,6 +45,7 @@ function* createPlayer(action) {
 
 export const addPlayer = (emitter, data) => {
     emitter(actions.addSelfPlayerAction(data));
+    history.push('/main');
 };
 
 export function* channelLoop() {
@@ -56,25 +58,26 @@ export function* channelLoop() {
 }
 
 export const model = (emitter, data) => {
-    console.log(data);
-    let player = data.players.find(item => item.name === 'Sasha');
-    console.log(player);
-
-    let deltaX = 1950 - X / 2;
-    let deltaY = 1280 - Y / 2;
-    console.log(`deltaX = ${deltaX}`);
-    console.log(`deltaY = ${deltaY}`);
-
-    const visibleFoods = [];
-
-    data.foods.map(item => {
-        item.x -= deltaX;
-        item.y -= deltaY;
-
-        if (item.x > 0 && item.y > 0) {
-            visibleFoods.push(item);
-        }
-    });
-    console.log(visibleFoods);
-    emitter(actions.addFoodsToFieldAction(visibleFoods));
+    console.log('model', data);
+    // console.log(data);
+    // let player = data.players.find(item => item.name === 'Sasha');
+    // console.log(player);
+    //
+    // let deltaX = 1950 - X / 2;
+    // let deltaY = 1280 - Y / 2;
+    // console.log(`deltaX = ${deltaX}`);
+    // console.log(`deltaY = ${deltaY}`);
+    //
+    // const visibleFoods = [];
+    //
+    // data.foods.map(item => {
+    //     item.x -= deltaX;
+    //     item.y -= deltaY;
+    //
+    //     if (item.x > 0 && item.y > 0) {
+    //         visibleFoods.push(item);
+    //     }
+    // });
+    // console.log(visibleFoods);
+    // emitter(actions.addFoodsToFieldAction(visibleFoods));
 };

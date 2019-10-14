@@ -24,31 +24,32 @@ class Main extends Component {
     render() {
         const { foods, player } = this.props;
 
-        return (
-            <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.moveField}>
-                <Layer>
-                    {
-                        foods.map((item, index) => {
-                            return (<Circle
-                                    key={index}
-                                    x = {item.x}
-                                    y = {item.y}
-                                    radius = {item.radius}
-                                    fill = {item.color}
-                            />
-                          );
-                        })
-                    }
-                    <Circle
-                        x = {player.x}
-                        y = {player.y}
-                        radius = {player.radius}
-                        fill = {player.color}
-                    />
-                </Layer>
-             </Stage>
+        return <div>Main</div>;
 
-        );
+        // return (
+        //     <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.moveField}>
+        //         <Layer>
+        //             {
+        //                 foods.map((item, index) => {
+        //                     return (<Circle
+        //                             key={index}
+        //                             x = {item.x}
+        //                             y = {item.y}
+        //                             radius = {item.radius}
+        //                             fill = {item.color}
+        //                     />
+        //                   );
+        //                 })
+        //             }
+        //             <Circle
+        //                 x = {player.x}
+        //                 y = {player.y}
+        //                 radius = {player.radius}
+        //                 fill = {player.color}
+        //             />
+        //         </Layer>
+        //      </Stage>
+        // );
     }
 }
 

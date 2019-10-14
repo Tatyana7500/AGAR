@@ -9,7 +9,7 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case constants.I_PLAYER:
-            console.log(action.payload);
+            console.log(action.type);
             return {
                 ...state,
                 player: action.payload,

@@ -20,10 +20,10 @@ io.sockets.on('connection', async socket => {
 
     io.sockets.emit(constants.I_PLAYER, player);
 
-    setInterval(sendModel, 10);
+    setInterval(sendModel, 2000);
     //io.sockets.emit(constants.PLAYERS, model.players.map(player => player));
 });
 
 function sendModel() {
-    io.sockets.emit(constants.MODEL, model);
+    io.sockets.emit(constants.MODEL, { data: [] });
 }
