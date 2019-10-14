@@ -1,16 +1,16 @@
-const config = require ('../config');
+const config = require('../config');
 
 class Model {
-    constructor () {
+    constructor() {
         this.foods = [];
         this.players = [];
     }
 
-    initialize () {
+    initialize() {
         this.generateFoods();
     }
 
-    generateFoods () {
+    generateFoods() {
         const { foodsCount, foodsRadius } = config;
 
         for (let i = 0; i < foodsCount; i++) {
@@ -21,6 +21,11 @@ class Model {
     }
 
     createPlayer(name, color) {
+        // const auth = this.players.find(item => item.name === name);
+        //
+        // if (auth) {
+        //     return false;
+        // }
         const { playerRadius } = config;
         const player = {
             name,
@@ -37,7 +42,7 @@ class Model {
 
     randomNumber() {
         return Math.floor(Math.random() * 5000);
-    };
+    }
 
     randomColor() {
         let hex = ['0', '1', '2', '3', '4', '5', '6', '7',
@@ -47,7 +52,7 @@ class Model {
             color = color + hex[Math.floor(Math.random() * 16)];
         }
         return color;
-    };
+    }
 }
 
-module.exports =  Model;
+module.exports = Model;

@@ -4,10 +4,12 @@ import Konva from 'konva';
 import { Stage, Layer, Circle } from 'react-konva';
 
 class Main extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-
-
+        this.state = {
+            x: 2000,
+            y: 2000,
+        };
     }
 
     static propTypes = {
@@ -15,32 +17,24 @@ class Main extends Component {
         player: PropType.object.isRequired,
     };
 
+    moveField = (e) => {
 
-    moveField(e) {
-        let stage = e.currentTarget;
-        //stage = this.stageRef;
-        //stage = e.target.getStage();
-        console.log(stage)
-    }
+    };
 
     render() {
         const { foods, player } = this.props;
 
-
         return (
-
-            <Stage width = '5000' height = '5000' onMouseMove ={this.moveField}  ref={ref => {
-                this.stageRef = ref;
-            }}>
-                <Layer >
+            <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.moveField}>
+                <Layer>
                     {
                         foods.map((item, index) => {
-                            return ( <Circle
+                            return (<Circle
                                     key={index}
-                                x = {item.x}
-                                y = {item.y}
-                                radius = {item.radius}
-                                fill = {item.color}
+                                    x = {item.x}
+                                    y = {item.y}
+                                    radius = {item.radius}
+                                    fill = {item.color}
                             />
                           );
                         })
@@ -52,7 +46,6 @@ class Main extends Component {
                         fill = {player.color}
                     />
                 </Layer>
-
              </Stage>
 
         );

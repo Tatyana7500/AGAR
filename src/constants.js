@@ -1,5 +1,7 @@
 module.exports = {
+    AUTH: 'AUTH',
     FOODS: 'FOODS',
+    MODEL: 'MODEL',
     ONLINE: 'ONLINE',
     PLAYER: 'PLAYER',
     PLAYERS: 'PLAYERS',

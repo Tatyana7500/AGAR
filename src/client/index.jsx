@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import rootSaga from '../client/sagas';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import App from "./App";
+import App from './App';
 
 const configureStore = () => {
     const sagaMiddleware = createSagaMiddleware();
@@ -17,6 +17,7 @@ const configureStore = () => {
 };
 
 const store = configureStore();
+window.store = store;
 
 ReactDOM.render(
     <Provider store={store}>
