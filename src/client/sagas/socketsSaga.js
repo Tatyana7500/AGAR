@@ -1,5 +1,7 @@
-import { put, call, takeEvery, fork, select, take } from 'redux-saga/effects';
+import { put, call, takeEvery, fork, select, take, delay } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
+import history from '../utils/browserHistory';
+import * as selectors from '../selectors';
 import * as actions from '../actions';
 import * as constants from '../../constants';
 import { createSocket } from '../utils/socketsHelpers';
@@ -8,21 +10,20 @@ let socket = null;
 let channel = null;
 
 export default function* watchSaga() {
-    channel = yield call(initSocketChannel);
-    yield fork(channelLoop);
-    yield call(createPlayer);
+    const player = yield take(constants.AUTH);
+    yield call(createPlayer, player);
 }
 
-function initSocketChannel() {
+function initSocketChannel(player) {
     if (channel) {
         return;
     }
 
     channel = eventChannel(emitter => {
-        socket = createSocket(constants.LOCALHOST);
-        socket.on(constants.FOODS, data => foods(emitter, data));
-        socket.on(constants.I_PLAYER, data => player(emitter, data));
-        socket.on(constants.PLAYERS, data => players(emitter, data));
+        socket = createSocket(constants.LOCALHOST, player);
+
+        socket.on(constants.I_PLAYER, data => addPlayer(emitter, data));
+        socket.on(constants.MODEL, data => model(emitter, data));
 
         return () => {
             socket.close();
@@ -35,28 +36,33 @@ function initSocketChannel() {
     return channel;
 }
 
-function createPlayer() {
-    const player = {name: 'Tanya', color: '#cccccc'};
-    socket.emit(constants.PLAYER, player);
+function* createPlayer(action) {
+    channel = yield call(initSocketChannel, action.payload);
+    yield fork(channelLoop);
+    yield fork(updatePlayerServer);
 }
 
-export const player = (emitter, data) => {
-    console.log(' you player ');
-    console.log(data);
+export const addPlayer = (emitter, data) => {
+    emitter(actions.setPlayerStore(data));
+    history.push('/main');
 };
 
-export const players = (emitter, data) => {
-    console.log(' all players ');
-    console.log(data);
-};
-
-export const foods = (emitter, data) => {
-    emitter(actions.addFoodsToFieldAction(data));
-};
-
-export function* channelLoop () {
-    while (channel){
+export function* channelLoop() {
+    while (channel) {
         const action = yield take(channel);
         yield put(action);
     }
 }
+
+export function* updatePlayerServer() {
+    while (channel) {
+        yield delay(30);
+        const player = yield select(selectors.getPlayer);
+        socket.emit(constants.SEND_COORDS, player);
+    }
+}
+
+export const model = (emitter, data) => {
+    emitter(actions.setModelStore(data));
+};
+

@@ -1,35 +1,61 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
-import Konva from 'konva';
 import { Stage, Layer, Circle } from 'react-konva';
 
-class Main extends Component {
-    constructor(props){
-        super(props);
-    }
+const widthWindow = window.innerWidth;
+const heightWindow = window.innerHeight;
 
+class Main extends Component {
     static propTypes = {
-        foods: PropType.array.isRequired,
+        showModel: PropType.object.isRequired,
+        mouseMove: PropType.func.isRequired,
     };
+
+    onMouseMove = ({ evt }) => {
+        const { mouseMove } = this.props;
+        const coordinates = {
+            x: evt.clientX,
+            y: evt.clientY,
+        };
+
+        mouseMove(coordinates);
+    };
+
     render() {
-        const { foods } = this.props;
+        const {
+            showModel: { foods, players },
+        } = this.props;
 
         return (
-
-            <Stage width = '5000' height = '5000' >
+            <Stage width={widthWindow}
+                   height={heightWindow}
+                   onMouseMove={this.onMouseMove}
+            >
                 <Layer>
                     {
-                        foods.map(item => {
-                            return ( <Circle
-                                x = {item.x}
-                                y = {item.y}
-                                radius = {item.radius}
-                                fill = {item.color}
-                            /> );
-                        })
+                        foods.map((item, index) => (
+                            <Circle
+                                key={index}
+                                x={item.x}
+                                y={item.y}
+                                radius={item.radius}
+                                fill={item.color}
+                            />
+                        ))
+                    }
+                    {
+                        players.map(item => (
+                            <Circle
+                                key={item.name}
+                                x={item.x}
+                                y={item.y}
+                                radius={item.radius}
+                                fill={item.color}
+                            />
+                        ))
                     }
                 </Layer>
-             </Stage>
+            </Stage>
         );
     }
 }

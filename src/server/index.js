@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const constants = require('../constants');
 const jsonParser = bodyParser.json();
-const Model = require ('./model');
+const Model = require('./model');
 
 const app = express();
 app.use(express.static('dist'));
@@ -16,12 +16,22 @@ const model = new Model();
 model.initialize();
 
 io.sockets.on('connection', async socket => {
-    await socket.on(constants.PLAYER, (response) => {
-        const player = model.createPlayer(response.name, response.color);
+    const player = model.createPlayer(socket.handshake.query.name, socket.handshake.query.color);
 
-        io.sockets.emit(constants.I_PLAYER, player);
-    });
+    if (player) {
+        const mySocketId = io.sockets.connected[socket.id];
+        mySocketId && mySocketId.emit(constants.I_PLAYER, player);
+    }
 
-    io.sockets.emit(constants.FOODS, model.foods.map(food => food));
-    io.sockets.emit(constants.PLAYERS, model.players.map(player => player));
+    setInterval(sendModel, 33);
+
+    socket.on(constants.SEND_COORDS, setCoordsPlayer);
 });
+
+function sendModel() {
+    io.sockets.emit(constants.MODEL, model);
+}
+
+function setCoordsPlayer(player) {
+    model.changeCoordsPlayer(player);
+}
