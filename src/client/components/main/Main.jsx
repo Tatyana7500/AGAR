@@ -1,55 +1,62 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
-import Konva from 'konva';
 import { Stage, Layer, Circle } from 'react-konva';
 
-class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            x: 2000,
-            y: 2000,
-        };
-    }
+const widthWindow = window.innerWidth;
+const heightWindow = window.innerHeight;
 
+class Main extends Component {
     static propTypes = {
-        foods: PropType.array.isRequired,
-        player: PropType.object.isRequired,
+        showModel: PropType.object.isRequired,
+        mouseMove: PropType.func.isRequired,
     };
 
-    moveField = (e) => {
+    onMouseMove = ({ evt }) => {
+        const { mouseMove } = this.props;
+        const coordinates = {
+            x: evt.clientX,
+            y: evt.clientY,
+        };
 
+        mouseMove(coordinates);
     };
 
     render() {
-        const { foods, player } = this.props;
+        const {
+            showModel: { foods, players },
+        } = this.props;
 
-        return <div>Main</div>;
-
-        // return (
-        //     <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.moveField}>
-        //         <Layer>
-        //             {
-        //                 foods.map((item, index) => {
-        //                     return (<Circle
-        //                             key={index}
-        //                             x = {item.x}
-        //                             y = {item.y}
-        //                             radius = {item.radius}
-        //                             fill = {item.color}
-        //                     />
-        //                   );
-        //                 })
-        //             }
-        //             <Circle
-        //                 x = {player.x}
-        //                 y = {player.y}
-        //                 radius = {player.radius}
-        //                 fill = {player.color}
-        //             />
-        //         </Layer>
-        //      </Stage>
-        // );
+        return (
+            <Stage width={widthWindow}
+                   height={heightWindow}
+                   onMouseMove={this.onMouseMove}
+            >
+                <Layer>
+                    {
+                        foods.map((item, index) => (
+                            <Circle
+                                key={index}
+                                x={item.x}
+                                y={item.y}
+                                radius={item.radius}
+                                fill={item.color}
+                            />
+                        ))
+                    }
+                    {
+                        players.map(item => (
+                            <Circle
+                                key={item.name}
+                                x={item.x}
+                                y={item.y}
+                                radius={item.radius}
+                                fill={item.color}
+                            />
+                        ))
+                    }
+                </Layer>
+            </Stage>
+        );
     }
 }
 

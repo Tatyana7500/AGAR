@@ -1,16 +1,16 @@
 import * as constants from '../../constants';
 
 const initialState = {
-    foods: [],
+    mouseXY: { x: 0, y: 0 },
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case constants.FOODS:
-        return {
-            ...state,
-            foods: action.payload,
-        };
+        case constants.MOUSE_MOVE:
+            return {
+                ...state,
+                mouseXY: { ...action.payload },
+            };
         default:
             return state;
     }

@@ -15,8 +15,6 @@ class LoginForm extends Component {
             color: document.getElementById('color').value,
         };
 
-        console.log(this.props);
-
         this.props.authPlayer(player);
     };
 

@@ -1,4 +1,4 @@
-import { put, call, takeEvery, fork, select, take } from 'redux-saga/effects';
+import { put, call, takeEvery, fork, select, take, delay } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import history from '../utils/browserHistory';
 import * as selectors from '../selectors';
@@ -8,12 +8,10 @@ import { createSocket } from '../utils/socketsHelpers';
 
 let socket = null;
 let channel = null;
-const X = window.innerWidth;
-const Y = window.innerHeight;
 
 export default function* watchSaga() {
-    yield takeEvery(constants.AUTH, createPlayer);
-    yield fork(channelLoop);
+    const player = yield take(constants.AUTH);
+    yield call(createPlayer, player);
 }
 
 function initSocketChannel(player) {
@@ -41,43 +39,30 @@ function initSocketChannel(player) {
 function* createPlayer(action) {
     channel = yield call(initSocketChannel, action.payload);
     yield fork(channelLoop);
+    yield fork(updatePlayerServer);
 }
 
 export const addPlayer = (emitter, data) => {
-    emitter(actions.addSelfPlayerAction(data));
+    emitter(actions.setPlayerStore(data));
     history.push('/main');
 };
 
 export function* channelLoop() {
-    console.log(channel);
     while (channel) {
-        console.log('loop');
         const action = yield take(channel);
         yield put(action);
     }
 }
 
+export function* updatePlayerServer() {
+    while (channel) {
+        yield delay(30);
+        const player = yield select(selectors.getPlayer);
+        socket.emit(constants.SEND_COORDS, player);
+    }
+}
+
 export const model = (emitter, data) => {
-    console.log('model', data);
-    // console.log(data);
-    // let player = data.players.find(item => item.name === 'Sasha');
-    // console.log(player);
-    //
-    // let deltaX = 1950 - X / 2;
-    // let deltaY = 1280 - Y / 2;
-    // console.log(`deltaX = ${deltaX}`);
-    // console.log(`deltaY = ${deltaY}`);
-    //
-    // const visibleFoods = [];
-    //
-    // data.foods.map(item => {
-    //     item.x -= deltaX;
-    //     item.y -= deltaY;
-    //
-    //     if (item.x > 0 && item.y > 0) {
-    //         visibleFoods.push(item);
-    //     }
-    // });
-    // console.log(visibleFoods);
-    // emitter(actions.addFoodsToFieldAction(visibleFoods));
+    emitter(actions.setModelStore(data));
 };
+

@@ -1,18 +1,15 @@
 import * as constants from '../../constants';
 
 const initialState = {
+    foods: [],
     players: [],
-    player: {},
-
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case constants.I_PLAYER:
-            console.log(action.type);
+        case constants.SET_MODEL_STORE:
             return {
-                ...state,
-                player: action.payload,
+                ...action.payload,
             };
         default:
             return state;
