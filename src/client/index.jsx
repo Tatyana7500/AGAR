@@ -4,6 +4,7 @@ import rootReducer from '../client/reducers';
 import { Provider } from 'react-redux';
 import rootSaga from '../client/sagas';
 import ReactDOM from 'react-dom';
+import './style/index.css';
 import React from 'react';
 import App from './App';
 

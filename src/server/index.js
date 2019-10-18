@@ -14,6 +14,7 @@ const io = socket(server);
 
 const model = new Model();
 model.initialize();
+model.start();
 
 io.sockets.on('connection', async socket => {
     const player = model.createPlayer(socket.handshake.query.name, socket.handshake.query.color);
@@ -21,12 +22,19 @@ io.sockets.on('connection', async socket => {
     if (player) {
         const mySocketId = io.sockets.connected[socket.id];
         mySocketId && mySocketId.emit(constants.I_PLAYER, player);
+    } else {
+        socket.disconnect();
     }
 
-    setInterval(sendModel, 33);
+    setInterval(sendModel, 30);
 
     socket.on(constants.SEND_COORDS, setCoordsPlayer);
+    socket.on(constants.DISCONNECT, () => handleDisconnect(socket));
 });
+
+function handleDisconnect(socket) {
+    model.deletePlayer(socket.handshake.query.name);
+}
 
 function sendModel() {
     io.sockets.emit(constants.MODEL, model);

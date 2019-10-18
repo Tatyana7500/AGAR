@@ -10,14 +10,9 @@ class Model {
         this.generateFoods();
     }
 
-    generateFoods() {
-        const { foodsCount, foodsRadius } = config;
-
-        for (let i = 0; i < foodsCount; i++) {
-            const food = { radius: foodsRadius, x: this.randomNumber(), y: this.randomNumber(), color: this.randomColor() };
-
-            this.foods.push(food);
-        }
+    start() {
+        setInterval(this.collision, 30);
+        setInterval(this.handleFoods, 30);
     }
 
     createPlayer(name, color) {
@@ -42,11 +37,89 @@ class Model {
     }
 
     changeCoordsPlayer(player) {
-        console.log(player);
-        const pl = this.players.find(item => item.name === player.name);
-        const index = this.players.indexOf(pl);
-        this.players[index] = player;
+         const index = this.players.findIndex(item => item.name === player.name);
+
+         if (index !== -1) {
+             this.players[index].x = player.x;
+             this.players[index].y = player.y;
+         }
     }
+
+    collision = () => {
+        if (this.players.length === 0) {
+            return;
+        }
+
+        this.collisionPlayersToFoods();
+        this.collisionPlayerToPlayer();
+    };
+
+    collisionPlayersToFoods = () => {
+        for (let i = 0; i < this.foods.length; i++) {
+            for (let j = 0; j < this.players.length; j++) {
+                const dx = this.foods[i].x - this.players[j].x;
+                const dy = this.foods[i].y - this.players[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < this.players[j].radius - this.foods[i].radius) {
+                    this.players[j].radius += 1;
+                    this.foods.splice(i, 1);
+                }
+            }
+        }
+    };
+
+    collisionPlayerToPlayer = () => {
+        for (let i = 0; i < this.players.length - 1; i++) {
+            for (let j = 1; j < this.players.length; j++) {
+                const dx = this.players[i].x - this.players[j].x;
+                const dy = this.players[i].y - this.players[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                const indexBigger = this.players[i].radius > this.players[j].radius ? i : j;
+                const indexSmaller = this.players[i].radius < this.players[j].radius ? i : j;
+
+                if (distance < this.players[indexBigger].radius) {
+                    this.players[indexBigger].radius += 1;
+                    this.players[indexSmaller].radius -= 1;
+
+                    if (this.players[indexSmaller].radius < 10) {
+                        this.players.splice(indexSmaller, 1);
+                    }
+                }
+            }
+        }
+    };
+
+    deletePlayer = (name) => {
+        const index = this.players.findIndex(item => item.name === name);
+        this.players.splice(index, 1);
+    };
+
+    generateFoods() {
+        const { foodsCount } = config;
+
+        this.createFoods(foodsCount);
+    }
+
+    handleFoods = () => {
+        const { foodsCount } = config;
+
+        if (this.foods.length < foodsCount) {
+            const count = foodsCount - this.foods.length;
+            this.createFoods(count);
+        }
+    };
+
+    createFoods = (foodsCount) => {
+        const { foodsRadius } = config;
+
+        for (let i = 0; i < foodsCount; i++) {
+            const food = { radius: foodsRadius, x: this.randomNumber(), y: this.randomNumber(), color: this.randomColor() };
+
+            this.foods.push(food);
+        }
+    };
 
     randomNumber() {
         return Math.floor(Math.random() * config.fieldWidth);

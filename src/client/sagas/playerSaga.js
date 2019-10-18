@@ -14,10 +14,3 @@ export function* updatePlayer() {
         yield put(actions.updatePlayerCoordinatesStore(mouseXY));
     }
 }
-
-// function* setCoordsPlayer(action) {
-//     const player = yield select(selectors.getPlayer);
-//     player.x = action.payload.x;
-//     player.y = action.payload.y;
-//     yield put(actions.addSelfPlayerAction(player));
-// }

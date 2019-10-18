@@ -1,4 +1,4 @@
-import { put, call, takeEvery, fork, select, take, delay } from 'redux-saga/effects';
+import { put, call, fork, select, take, delay } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import history from '../utils/browserHistory';
 import * as selectors from '../selectors';
@@ -21,6 +21,10 @@ function initSocketChannel(player) {
 
     channel = eventChannel(emitter => {
         socket = createSocket(constants.LOCALHOST, player);
+
+        if (socket.disconnected) {
+            //открыть окно с ошибкой
+        }
 
         socket.on(constants.I_PLAYER, data => addPlayer(emitter, data));
         socket.on(constants.MODEL, data => model(emitter, data));

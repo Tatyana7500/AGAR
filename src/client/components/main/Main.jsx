@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
-import { Stage, Layer, Circle } from 'react-konva';
+import { Stage, Layer, Circle, Text } from 'react-konva';
 
 const widthWindow = window.innerWidth;
 const heightWindow = window.innerHeight;
@@ -45,6 +45,7 @@ class Main extends Component {
                     }
                     {
                         players.map(item => (
+                            <>
                             <Circle
                                 key={item.name}
                                 x={item.x}
@@ -52,6 +53,14 @@ class Main extends Component {
                                 radius={item.radius}
                                 fill={item.color}
                             />
+                                <Text
+                                    fontSize={20}
+                                    text={item.name}
+                                    wrap='char'
+                                    align='center'
+                                    width={400}
+                                />
+                            </>
                         ))
                     }
                 </Layer>
