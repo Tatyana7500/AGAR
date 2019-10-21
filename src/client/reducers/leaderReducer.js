@@ -1,17 +1,15 @@
 import * as constants from '../../constants';
 
 const initialState = {
-    isOpen: false,
-    content: '',
+    leaders: [],
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case constants.SHOW_MODAL:
-            console.log('reducer');
+        case constants.SET_LEADER_PLAYERS_STORE:
             return {
                 ...state,
-                isOpen: action.payload.isOpen, content: action.payload.content,
+                leaders: action.payload.leaders,
             };
         default:
             return state;

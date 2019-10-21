@@ -8,9 +8,9 @@ export default function* watchSaga() {
 }
 
 export function* handleOpenModal(action) {
-    yield put(actions.showModalAction({ isOpen: true, modalType: action.payload }));
+    yield put(actions.showModalAction({ isOpen: true, content: action.payload }));
 }
 
 export function* handleHide(action) {
-    yield put(actions.showModalAction({ isOpen: false, modalType: '', content: '' }));
+    yield put(actions.showModalAction({ isOpen: false, content: '' }));
 }

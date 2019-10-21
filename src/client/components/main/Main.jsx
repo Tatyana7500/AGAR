@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
 import { Stage, Layer, Circle, Text } from 'react-konva';
+import { Leader } from './styledComponent';
 
 const widthWindow = window.innerWidth;
 const heightWindow = window.innerHeight;
 
 class Main extends Component {
     static propTypes = {
-        showModel: PropType.object.isRequired,
         mouseMove: PropType.func.isRequired,
+        showModel: PropType.object.isRequired,
+        showLeaders: PropType.object.isRequired,
     };
 
     onMouseMove = ({ evt }) => {
@@ -24,9 +26,11 @@ class Main extends Component {
     render() {
         const {
             showModel: { foods, players },
+            showLeaders,
         } = this.props;
 
         return (
+            <div>
             <Stage width={widthWindow}
                    height={heightWindow}
                    onMouseMove={this.onMouseMove}
@@ -44,27 +48,39 @@ class Main extends Component {
                         ))
                     }
                     {
-                        players.map(item => (
+                        players.map((item, index) => (
                             <>
                             <Circle
-                                key={item.name}
+                                key={index}
                                 x={item.x}
                                 y={item.y}
                                 radius={item.radius}
                                 fill={item.color}
                             />
                                 <Text
-                                    fontSize={20}
+                                    fontSize={16}
                                     text={item.name}
-                                    wrap='char'
-                                    align='center'
-                                    width={400}
+                                    fill={'#ffffff'}
+                                    x={item.x - item.radius / 2}
+                                    y={item.y - 13}
+                                    width={item.radius}
+                                    height={item.radius}
+                                    align={'center'}
                                 />
                             </>
                         ))
                     }
                 </Layer>
             </Stage>
+            <Leader>
+                <Leader.p>Leaders:</Leader.p>
+                {
+                    showLeaders.map((item, index) => (
+                        <Leader.p key={index}>{index + 1}. {item.name}</Leader.p>
+                    ))
+                }
+            </Leader>
+            </div>
         );
     }
 }

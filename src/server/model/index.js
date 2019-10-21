@@ -13,6 +13,7 @@ class Model {
     start() {
         setInterval(this.collision, 30);
         setInterval(this.handleFoods, 30);
+        setInterval(this.sortPlayers, 30);
     }
 
     createPlayer(name, color) {
@@ -95,6 +96,14 @@ class Model {
         const index = this.players.findIndex(item => item.name === name);
         this.players.splice(index, 1);
     };
+
+    sortPlayers = () => {
+        this.sortByRadius(this.players);
+    };
+
+    sortByRadius(players) {
+        players.sort((a, b) => a.radius <= b.radius ? 1 : -1);
+    }
 
     generateFoods() {
         const { foodsCount } = config;

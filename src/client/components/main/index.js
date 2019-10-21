@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import * as selectors from '../../selectors';
 import Main from './Main.jsx';
 import * as actions from '../../actions';
-import * as constants from '../../../constants';
 
 export const mapStateToProps = state => ({
     showModel: selectors.getShowModel(state),
+    showLeaders: selectors.getLeadersPlayers(state),
 });
 
 export const mapDispatchToProps = dispatch => ({

@@ -22,9 +22,9 @@ function initSocketChannel(player) {
     channel = eventChannel(emitter => {
         socket = createSocket(constants.LOCALHOST, player);
 
-        if (socket.disconnected) {
-            //открыть окно с ошибкой
-        }
+        // if (socket.disconnected) {
+        //     errorAuth(emitter, player.name);
+        // }
 
         socket.on(constants.I_PLAYER, data => addPlayer(emitter, data));
         socket.on(constants.MODEL, data => model(emitter, data));
@@ -49,6 +49,10 @@ function* createPlayer(action) {
 export const addPlayer = (emitter, data) => {
     emitter(actions.setPlayerStore(data));
     history.push('/main');
+};
+
+export const errorAuth = (emitter, name) => {
+    emitter(actions.showModalAction({ isOpen: true, content: `Player with that name ${name} already exists!` }));
 };
 
 export function* channelLoop() {

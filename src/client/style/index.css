@@ -11,3 +11,7 @@
     position: absolute;
     background-color: rgba(33, 33, 71, 0.5);
 }
+
+canvas {
+    position: absolute;
+}

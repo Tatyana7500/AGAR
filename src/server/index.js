@@ -18,9 +18,9 @@ model.start();
 
 io.sockets.on('connection', async socket => {
     const player = model.createPlayer(socket.handshake.query.name, socket.handshake.query.color);
+    const mySocketId = io.sockets.connected[socket.id];
 
     if (player) {
-        const mySocketId = io.sockets.connected[socket.id];
         mySocketId && mySocketId.emit(constants.I_PLAYER, player);
     } else {
         socket.disconnect();
